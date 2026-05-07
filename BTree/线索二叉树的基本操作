@@ -1,0 +1,98 @@
+#include<iostream>
+using namespace std;
+
+struct BthNode{
+char data;
+BthNode*lchild,*rchild;
+int ltag,rtag;
+BthNode(char d)
+{data=d;
+lchild=rchild=NULL;
+ltag=rtag=0;
+}
+
+
+
+
+};
+class ThreadTree{
+BthNode*root;
+BthNode*pre;
+BthNode*r;
+public:
+ThreadTree(){
+    r=NULL;
+    root=NULL;
+}
+~ThreadTree(){
+    if(r!=NULL){DestroyBTreel(r);}
+    if(root!=NULL){delete root;}
+}
+void DestroyBTreel(BthNode*b){
+    if(b->ltag==0){DestroyBTreel(b->lchild);}
+    if(b->rtag==0){DestroyBTreel(b->rchild);}
+    delete b;
+}
+
+void CreateBTree(string str);
+void DispBTree();
+void CreateThread();
+void ThInOrder();
+void Thread(BthNode*&p);
+};
+void ThreadTree::CreateThread(){
+    root=new BthNode();
+    root->ltag=0;
+    root->rtag=1;
+    root->rchild=r;
+    if(r==NULL){
+        root->lchild=root;
+        root->rchild=NULL;
+
+    }
+    else{
+        root->lchild=r;
+        pre=root;
+        Thread(r);
+        pre->rchild=root;
+        pre->rtag=1;
+        root->rchild=pre;
+
+    }
+}
+void ThreadTree::Thread(BthNode*&p){
+    if(p!=NULL){
+        Thread(p->lchild);
+        if(p->lchild==NULL){
+            p->lchild=pre;
+            p->ltag=1;
+
+        }
+        else{
+            p->ltag=0;
+        }
+        if(pre!=NULL){
+            if(pre->rchild==NULL){
+                pre->rchild=p;
+                pre->rtag=1;
+            }
+            else{pre->rtag=0;}
+        }
+        pre=p;
+        Thread(p->rchild);
+    }
+}
+void ThreadTree::ThInOrder(){
+    BthNode*p=root->lchild;
+    while(p!=root){
+        while(p!=root&&p->ltag==0){
+            p=p->lchild;
+        }
+        cout<<p->data;
+        while(p->rtag==1&&p->rchild!=root){
+            p=p->rchild;
+            cout<<p->data;
+        }
+        p=p->rchild;
+    }
+}
