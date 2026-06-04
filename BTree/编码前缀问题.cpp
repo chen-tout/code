@@ -38,7 +38,7 @@ bool insertAndCheck(Node* root, string s) {
    
     if (!isNewNodeCreated) return false;
 
-    // 到达终点，插上结束红旗
+    
     p->isEnd = true;
     return true;
 }
